@@ -1,0 +1,543 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<div id="ficha" class="charsheet sheet-main">
+
+       <form class="sheetform" autocomplete="off">
+            <div class="sheet-main">
+                <div class="sheet-left-container">
+                    <div class="sheet-header-info">
+                        <div class="sheet-input-with-text-bellow sheet-char-name">
+                            <input name="attr_character_name" type="text" spellcheck="false" value="">
+                            <span>Nome</span>
+                        </div>
+                        <div class="sheet-input-with-text-bellow">
+                            <input name="attr_trace" type="text" spellcheck="false" value="">
+                            <span>Raça</span>
+                        </div>
+                        <div class="sheet-input-with-text-bellow">
+                            <input name="attr_torigin" type="text" spellcheck="false" value="">
+                            <span>Origem</span>
+                        </div>
+                        <div class="sheet-input-with-text-bellow">
+                            <input name="attr_class" type="text" spellcheck="false" value="">
+                            <span>Classe</span>
+                        </div>
+                    </div>
+
+                    <div class="sheet-character-attributes">
+                        <!-- FOR -->
+                        <div class="sheet-outer-container-negative-corner" data-attr="for">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-button-title-attribute">FOR</div>
+                                    <input type="text" class="sheet-fake-mod" id="mod-for" value="0" disabled>
+                                </div>
+                            </div>
+                            <div class="sheet-oval">
+                                <input value="0" type="number" class="attr-input">
+                            </div>
+                        </div>
+                        <!-- DES -->
+                        <div class="sheet-outer-container-negative-corner" data-attr="des">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-button-title-attribute">DES</div>
+                                    <input type="text" class="sheet-fake-mod" id="mod-des" value="0" disabled>
+                                </div>
+                            </div>
+                            <div class="sheet-oval">
+                                <input value="0" type="number" class="attr-input">
+                            </div>
+                        </div>
+                        <!-- CON -->
+                        <div class="sheet-outer-container-negative-corner" data-attr="con">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-button-title-attribute">CON</div>
+                                    <input type="text" class="sheet-fake-mod" id="mod-con" value="0" disabled>
+                                </div>
+                            </div>
+                            <div class="sheet-oval">
+                                <input value="0" type="number" class="attr-input">
+                            </div>
+                        </div>
+                        <!-- INT -->
+                        <div class="sheet-outer-container-negative-corner" data-attr="int">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-button-title-attribute">INT</div>
+                                    <input type="text" class="sheet-fake-mod" id="mod-int" value="0" disabled>
+                                </div>
+                            </div>
+                            <div class="sheet-oval">
+                                <input value="0" type="number" class="attr-input">
+                            </div>
+                        </div>
+                        <!-- SAB -->
+                        <div class="sheet-outer-container-negative-corner" data-attr="sab">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-button-title-attribute">SAB</div>
+                                    <input type="text" class="sheet-fake-mod" id="mod-sab" value="0" disabled>
+                                </div>
+                            </div>
+                            <div class="sheet-oval">
+                                <input value="0" type="number" class="attr-input">
+                            </div>
+                        </div>
+                        <!-- CAR -->
+                        <div class="sheet-outer-container-negative-corner" data-attr="car">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-button-title-attribute">CAR</div>
+                                    <input type="text" class="sheet-fake-mod" id="mod-car" value="0" disabled>
+                                </div>
+                            </div>
+                            <div class="sheet-oval">
+                                <input value="0" type="number" class="attr-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sheet-pseudo-attributes">
+                        <div class="sheet-container-negative-corner sheet-container-pvs-mps">
+                            <div class="sheet-inside-negative-corner">
+                                <div class="sheet-box-title">Pontos de Vida</div>
+                                <div class="sheet-content-centered sheet-border-right">
+                                    <input type="number" value="10" id="hp-max">
+                                </div>
+                                <div class="sheet-content-centered">
+                                    <input type="number" value="10" id="hp-current">
+                                </div>
+                                <div class="sheet-content-centered sheet-border-left">
+                                    <input type="number" value="10" id="hp-temp">
+                                </div>
+                                <div class="sheet-content-centered sheet-smaller-text">Máximos</div>
+                                <div class="sheet-content-centered sheet-smaller-text">Atuais</div>
+                                <div class="sheet-content-centered sheet-smaller-text">Temporários</div>
+                            </div>
+                        </div>
+                        <div class="sheet-container-negative-corner sheet-container-pvs-mps">
+                            <div class="sheet-inside-negative-corner">
+                                <div class="sheet-box-title">Pontos de Mana</div>
+                                <div class="sheet-content-centered sheet-border-right">
+                                    <input type="number" value="1" id="mana-max">
+                                </div>
+                                <div class="sheet-content-centered">
+                                    <input type="number" value="1" id="mana-current">
+                                </div>
+                                <div class="sheet-content-centered sheet-border-left">
+                                    <input type="number" value="1" id="mana-temp">
+                                </div>
+                                <div class="sheet-content-centered sheet-smaller-text">Máximos</div>
+                                <div class="sheet-content-centered sheet-smaller-text">Atuais</div>
+                                <div class="sheet-content-centered sheet-smaller-text">Temporários</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sheet-attacks-container">
+                        <div class="sheet-container-negative-corner">
+                            <div class="sheet-inside-negative-corner">
+                                <div class="sheet-attacksgrid sheet-header">
+                                    <div class="sheet-grid-title">Nome do Ataque</div>
+                                    <div class="sheet-small-title">Bônus</div>
+                                    <div class="sheet-small-title">Dano</div>
+                                    <div class="sheet-small-title">Dano Extra</div>
+                                    <div class="sheet-small-title">Crítico</div>
+                                    <div></div>
+                                </div>
+                                <div id="attacks-list">
+                                    <!-- Ataques serão adicionados aqui -->
+                                </div>
+                                <button type="button" id="add-attack" class="action-button">Adicionar Ataque</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sheet-defense-and-proeficience-container">
+                        <div class="sheet-container-defense-armor-shield">
+                            <div class="sheet-container-negative-corner sheet-container-defense">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-grid-title">Defesa</div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div class="sheet-small-title">Mod. Des</div>
+                                    <div></div>
+                                    <div class="sheet-small-title">Armadura</div>
+                                    <div></div>
+                                    <div class="sheet-small-title">Escudo</div>
+                                    <div></div>
+                                    <div class="sheet-small-title">Outros</div>
+                                    
+                                    <div>
+                                        <input id="defense-total" disabled value="0" type="text">
+                                    </div>
+                                    <div class="sheet-signal">=</div>
+                                    <div class="sheet-big-signal">10</div>
+                                    <div class="sheet-signal">+</div>
+                                    <select id="defense-dex-mod">
+                                        <option value="nao">Não</option>
+                                        <option value="sim" selected>Sim</option>
+                                    </select>
+                                    <div class="sheet-signal">+</div>
+                                    <div>
+                                        <input id="defense-armor-bonus" type="number" value="0" disabled>
+                                    </div>
+                                    <div class="sheet-signal">+</div>
+                                    <div>
+                                        <input id="defense-shield-bonus" type="number" value="0" disabled>
+                                    </div>
+                                    <div class="sheet-signal">+</div>
+                                    <div>
+                                        <input id="defense-others" type="number" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sheet-container-negative-corner sheet-container-armor-shield">
+                                <div class="sheet-inside-negative-corner">
+                                    <div class="sheet-grid-title">Armadura &amp; Escudo</div>
+                                    <div class="sheet-small-title">Defesa</div>
+                                    <div class="sheet-small-title">Penalidade</div>
+                                    <div>
+                                        <input type="text" value="Armadura">
+                                    </div>
+                                    <div>
+                                        <input id="armor-defense-value" type="number" value="0">
+                                    </div>
+                                    <div>
+                                        <input type="number" value="0">
+                                    </div>
+                                    <div>
+                                        <input type="text" value="Escudo">
+                                    </div>
+                                    <div>
+                                        <input id="shield-defense-value" type="number" value="0">
+                                    </div>
+                                    <div>
+                                        <input type="number" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="sheet-box-proficiencies">
+                            <div class="sheet-container-negative-corner">
+                                <div class="sheet-inside-negative-corner" style="display: flex; flex-direction: column; align-items: flex-start;">
+                                    <div class="sheet-default-title">Proficiências</div>
+                                    <div id="proficiencies-list" style="width: 100%; flex-grow: 1; padding: 5px; overflow-y: auto;">
+                                        <!-- Proficiências aqui -->
+                                    </div>
+                                    <button type="button" id="add-proficiency" class="action-button" style="margin-bottom: 5px;">Adicionar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sheet-spells">
+                        <div class="sheet-container-negative-corner">
+                            <div class="sheet-inside-negative-corner">
+                                <div class="sheet-default-title">Magias</div>
+                                <div class="sheet-content-grid">
+                                    <div class="sheet-spellcolumn" id="spell-column-1">
+                                        <div class="sheet-cicloheader">
+                                            <div class="sheet-ciclo-title">1º Círculo</div>
+                                            <div class="sheet-ciclo-cost">1 PM</div>
+                                        </div>
+                                        <div class="sheet-containerspelllist"></div>
+                                        <button type="button" class="action-button add-spell-button" data-target-list="1">Adicionar</button>
+                                    </div>
+                                    <div class="sheet-spellcolumn" id="spell-column-2">
+                                        <div class="sheet-cicloheader">
+                                            <div class="sheet-ciclo-title">2º Círculo</div>
+                                            <div class="sheet-ciclo-cost">3 PM</div>
+                                        </div>
+                                        <div class="sheet-containerspelllist"></div>
+                                        <button type="button" class="action-button add-spell-button" data-target-list="2">Adicionar</button>
+                                    </div>
+                                </div>
+                                <div class="sheet-content-grid" style="margin-top: 10px;">
+                                    <div class="sheet-spellcolumn" id="spell-column-3">
+                                        <div class="sheet-cicloheader">
+                                            <div class="sheet-ciclo-title">3º Círculo</div>
+                                            <div class="sheet-ciclo-cost">6 PM</div>
+                                        </div>
+                                        <div class="sheet-containerspelllist"></div>
+                                        <button type="button" class="action-button add-spell-button" data-target-list="3">Adicionar</button>
+                                    </div>
+                                    <div class="sheet-spellcolumn" id="spell-column-4">
+                                        <div class="sheet-cicloheader">
+                                            <div class="sheet-ciclo-title">4º Círculo</div>
+                                            <div class="sheet-ciclo-cost">10 PM</div>
+                                        </div>
+                                        <div class="sheet-containerspelllist"></div>
+                                        <button type="button" class="action-button add-spell-button" data-target-list="4">Adicionar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sheet-right-container">
+                    <div class="sheet-logo-level">
+                        <div class="sheet-char-level-container">
+                            <div class="sheet-total-level">
+                                <span>Nível do Personagem</span>
+                                <input type="number" value="1" id="char-level">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sheet-skills-container">
+                        <div class="sheet-container-negative-corner">
+                            <div class="sheet-inside-negative-corner">
+                                <div class="sheet-skill-grid-template sheet-header">
+                                    <div class="sheet-grid-title sheet-pericias-titulo">Perícias</div>
+                                    <div class="sheet-grid-title" style="grid-column: 4;">Total</div>
+                                    <div class="sheet-small-title" style="grid-column: 8;">Treino</div>
+                                    <div class="sheet-small-title" style="grid-column: 10;">Outros</div>
+                                </div>
+                                <!-- Lista de Perícias -->
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Acrobacia</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Adestramento</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Atletismo</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for" selected>FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Atuação</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Cavalgar</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Conhecimento</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Cura</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Diplomacia</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Enganação</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Fortitude</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con" selected>CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Furtividade</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Guerra</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Iniciativa</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Intimidação</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Intuição</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Investigação</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Jogatina</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Ladinagem</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Luta</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for" selected>FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Misticismo</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Nobreza</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-oficio"><span>Ofício</span><input class="sheet-nome-oficio" type="text"></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-oficio"><span>Ofício</span><input class="sheet-nome-oficio" type="text"></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Percepção</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Pilotagem</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Pontaria</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Reflexos</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Religião</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Sobrevivência</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                                <div class="sheet-skill-grid-template sheet-skill-list">
+                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
+                                    <div class="sheet-skill-name"><span>Vontade</span></div>
+                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
+                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
+                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sheet-equipment-container">
+                        <div class="sheet-container-negative-corner">
+                            <div class="sheet-inside-negative-corner">
+                                <div class="sheet-grid-equipment">
+                                    <div class="sheet-small-title">QTD.</div>
+                                    <div class="sheet-grid-title">Equipamentos</div>
+                                    <div class="sheet-small-title">Peso</div>
+                                    <div></div>
+                                </div>
+                                <div id="equipment-list">
+                                    <!-- Equipamentos serão adicionados aqui -->
+                                </div>
+                                <button type="button" id="add-equipment" class="action-button">Adicionar Equipamento</button>
+                                <div class="sheet-container-money">
+                                    <span>T$:</span>
+                                    <input type="text" value="0">    
+                                    <span>TO:</span>
+                                    <input type="text" value="0">  
+                                    <span class="sheet-cargaspan">Carga:</span>
+                                    <input id="total-load" class="sheet-cargainput" type="text" value="0" readonly>            
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>    
+{% endblock %}
