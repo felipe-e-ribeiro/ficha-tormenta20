@@ -146,8 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     trainingBonusInput.value = trainingBonus;
 
                     const othersBonus = parseInt(skillRow.querySelector('.skill-others').value, 10) || 0;
+                    const level_plus = parseInt(level / 2);
                     
-                    const total = attrMod + trainingBonus + othersBonus;
+                    const total = attrMod + trainingBonus + othersBonus + level_plus;
                     skillRow.querySelector('.sheet-total').value = total;
                 });
             }
