@@ -394,6 +394,7 @@
                         adicionarLinhaMagia(e.target.dataset.circulo);
                     }
                 });
+
             };
 
             const carregarDadosIniciais = () => {
@@ -416,4 +417,5 @@
             carregarDadosIniciais();
             recalcularTudo();
             setupEventListeners();
+            inicializarBonusRaca();
         });
