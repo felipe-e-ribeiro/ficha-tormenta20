@@ -1,35 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Ficha Tormenta 20</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Personagem - Tormenta 20</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=MedievalSharp&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="/static/estilos.css">
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
-  <header class="bg-red-700 text-white p-4 shadow-md">
-    <h1 class="text-2xl font-bold text-center">Ficha Tormenta 20</h1>
-  </header>
-<main class="flex-1 container mx-auto px-4 py-6">
-    {% block content %}{% endblock %}
-<div class="mt-8 flex flex-wrap gap-4 justify-center">
-  <button onclick="gravarFicha()"
-          class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-    💾 Gravar
-  </button>
-  <button onclick="listarFichas()"
-          class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-    📂 Listar
-  </button>
-  <button onclick="exportarFicha()"
-          class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
-    🖨️ Exportar
-  </button>
-</div>
-    
-  </main>
 
-<div id="fichasSalvas" class="mt-6 flex flex-col gap-2 items-center hidden"></div>
+  <style>
+    @font-face {
+      font-family: 'Tormenta';
+      src: url('./static/fonts/Tormenta.ttf') format('truetype');
+    }
+  </style>
+  
+  <header class="header-tormenta">
+    <h1 class="titulo">Ficha Tormenta 20</h1>
+  </header>
+  </br>
+  <body class="website">
+    {% block content %}{% endblock %}
+  </main>
   <script src="/static/script.js"></script>
 </body>
 </html>

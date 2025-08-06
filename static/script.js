@@ -1,347 +1,419 @@
-document.addEventListener("DOMContentLoaded", () => {
-    carregarFichaAtual();
-    listarFichas();
-    document.querySelectorAll("input, textarea, select").forEach(el => {
-        el.addEventListener("input", salvarAuto);
-    });
-});
-
-function getFichaData() {
-    const inputs = document.querySelectorAll("input, textarea, select");
-    let data = {};
-    inputs.forEach(input => {
-        if (input.name) {
-            data[input.name] = input.value;
-        }
-    });
-    return data;
-}
-
-function setFichaData(data) {
-    const inputs = document.querySelectorAll("input, textarea, select");
-    inputs.forEach(input => {
-        if (input.name && data[input.name] !== undefined) {
-            input.value = data[input.name];
-        }
-    });
-}
-
-function salvarAuto() {
-    const data = getFichaData();
-    localStorage.setItem("fichaAtual", JSON.stringify(data));
-    listarFichas();
-}
-
-function carregarFichaAtual() {
-    const data = JSON.parse(localStorage.getItem("fichaAtual"));
-    if (data) setFichaData(data);
-}
-
-function gravarFicha() {
-    const data = getFichaData();
-    const nome = data.attr_character_name || "Ficha sem nome";
-    localStorage.setItem(nome, JSON.stringify(data));
-    listarFichas();
-}
-
-function listarFichas() {
-    const container = document.getElementById("fichasSalvas");
-
-    // Se já estiver visível, esconde e sai
-    if (!container.classList.contains("hidden")) {
-        container.classList.add("hidden");
-        return;
-    }
-
-    // Senão, mostra e popula a lista
-    container.innerHTML = "";
-    container.classList.remove("hidden");
-
-    Object.keys(localStorage).forEach(key => {
-        if (key === "fichaAtual") return;
-
-        const data = JSON.parse(localStorage.getItem(key));
-        const btn = document.createElement("button");
-        btn.textContent = `${data.attr_character_name || "?"} | ${data.attr_trace || "?"} | ${data.attr_class || "?"} | ${data.attr_torigin || "?"}`;
-        btn.className = "px-4 py-1 bg-gray-200 rounded hover:bg-gray-300 transition text-sm";
-        btn.onclick = () => setFichaData(data);
-
-        container.appendChild(btn);
-    });
-}
-
-
-function exportarFicha() {
-    const ficha = document.getElementById("ficha");
-
-    const printWindow = window.open("", "", "width=800,height=1000");
-
-    // Copia todos os estilos do documento original
-    const styles = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
-        .map(style => style.outerHTML)
-        .join("");
-
-    printWindow.document.write(`
-        <html>
-            <head>
-                <title>Exportar Ficha</title>
-                ${styles}
-            </head>
-            <body class="bg-white text-black p-4">
-                ${ficha.outerHTML}
-            </body>
-        </html>
-    `);
-
-    printWindow.document.close();
-    printWindow.focus();
-
-    // Espera os estilos carregarem antes de imprimir
-    printWindow.onload = () => {
-        printWindow.print();
-        printWindow.close();
-    };
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    carregarFichaAtual();
-    listarFichas();
-    document.querySelectorAll("input, textarea, select").forEach(el => {
-        el.addEventListener("input", salvarAuto);
-    });
-});
-
-
-//
-
         document.addEventListener('DOMContentLoaded', function() {
-            const modifiers = { for: 0, des: 0, con: 0, int: 0, sab: 0, car: 0 };
+            // --- VARIAVEIS GLOBAIS DA FICHA ---
+            var periciasTabelaBody, equipamentoTabela;
 
-            function calculateModifier(value) {
-                const numValue = parseInt(value, 0);
-                return isNaN(numValue) ? 0 : Math.floor((numValue - 0));
-            }
+            // --- ESTRUTURA DE DADOS ---
+            const PERICIAS = {
+                'acrobacia': { nome: 'Acrobacia ✠', attr: 'des', penalidade: true }, 'adestramento': { nome: 'Adestramento ✯', attr: 'car' },
+                'atletismo': { nome: 'Atletismo', attr: 'for' }, 'atuacao': { nome: 'Atuação ✯', attr: 'car' },
+                'cavalgar': { nome: 'Cavalgar', attr: 'des' }, 'conhecimento': { nome: 'Conhecimento ✯', attr: 'int' },
+                'cura': { nome: 'Cura', attr: 'sab' }, 'diplomacia': { nome: 'Diplomacia', attr: 'car' },
+                'enganacao': { nome: 'Enganação', attr: 'car' }, 'fortitude': { nome: 'Fortitude', attr: 'con' },
+                'furtividade': { nome: 'Furtividade ✠', attr: 'des', penalidade: true }, 'guerra': { nome: 'Guerra ✯', attr: 'int' },
+                'iniciativa': { nome: 'Iniciativa', attr: 'des' }, 'intimidacao': { nome: 'Intimidação', attr: 'car' },
+                'intuicao': { nome: 'Intuição', attr: 'sab' }, 'investigacao': { nome: 'Investigação', attr: 'int' },
+                'jogatina': { nome: 'Jogatina ✯', attr: 'car' }, 'ladinagem': { nome: 'Ladinagem ✯✠', attr: 'des', penalidade: true },
+                'luta': { nome: 'Luta', attr: 'for' }, 'misticismo': { nome: 'Misticismo ✯', attr: 'int' },
+                'nobreza': { nome: 'Nobreza ✯', attr: 'int' }, 'oficio': { nome: 'Ofício (____) ✯', attr: 'int' },
+                'percepcao': { nome: 'Percepção', attr: 'sab' }, 'pilotagem': { nome: 'Pilotagem ✯', attr: 'des' },
+                'pontaria': { nome: 'Pontaria', attr: 'des' }, 'reflexos': { nome: 'Reflexos', attr: 'des' },
+                'religiao': { nome: 'Religião ✯', attr: 'sab' }, 'sobrevivencia': { nome: 'Sobrevivência', attr: 'sab' },
+                'vontade': { nome: 'Vontade', attr: 'sab' }
+            };
+            const ARMADURAS = { 'Nenhuma': {def: 0, pen: 0}, 'Acolchoada': {def: 1, pen: 0}, 'Couro': {def: 2, pen: 0}, 'Couro Batido': {def: 3, pen: -1}, 'Gibão de Peles': {def: 4, pen: -3}, 'Couraça': {def: 5, pen: -4}, 'Brunea': {def: 5, pen: -2}, 'Cota de Malha': {def: 6, pen: -2}, 'Loriga Segmentada': {def: 7, pen: -3}, 'Meia Armadura': {def: 8, pen: -4}, 'Armadura Completa': {def: 10, pen: -5} };
+            const ESCUDOS = { 'Nenhum': {def: 0, pen: 0}, 'Escudo Leve': {def: 1, pen: -1}, 'Escudo Pesado': {def: 2, pen: -2} };
+            const CIRCULOS_MAGIA = { 1: '1 PM', 2: '3 PM', 3: '6 PM', 4: '10 PM', 5: '15 PM' };
 
-            function getTrainingBonus(level) {
-                if (level >= 15) return 6;
-                if (level >= 7) return 4;
-                if (level >= 1) return 2;
-                return 0;
-            }
+            // --- INICIALIZAÇÃO DOS ELEMENTOS DO DOM ---
+            periciasTabelaBody = document.getElementById('pericias-tabela-body');
+            equipamentoTabela = document.getElementById('equipamento-tabela');
 
-            function updateAllSkills() {
-                const level = parseInt(document.getElementById('char-level').value, 10) || 1;
-                const trainingBonusValue = getTrainingBonus(level);
+            // --- FUNÇÕES DE CÁLCULO ---
+            const calcularDefesa = () => {
+                const armaduraKey = document.getElementById('select-armadura').value;
+                const escudoKey = document.getElementById('select-escudo').value;
+                const armadura = ARMADURAS[armaduraKey] || {def: 0, pen: 0};
+                const escudo = ESCUDOS[escudoKey] || {def: 0, pen: 0};
 
-                document.querySelectorAll('.sheet-skill-list').forEach(skillRow => {
-                    const selectedAttr = skillRow.querySelector('.skill-attr').value;
-                    const attrMod = modifiers[selectedAttr];
-                    
-                    const trainingCheckbox = skillRow.querySelector('.skill-training');
-                    const trainingBonusInput = skillRow.querySelector('.skill-training-bonus');
-                    let trainingBonus = 0;
-                    if (trainingCheckbox.checked) {
-                        trainingBonus = trainingBonusValue;
+                document.getElementById('armadura-defesa-display').value = armadura.def;
+                document.getElementById('armadura-penalidade-display').value = armadura.pen;
+                document.getElementById('escudo-defesa-display').value = escudo.def;
+                document.getElementById('escudo-penalidade-display').value = escudo.pen;
+                
+                const destreza = parseInt(document.getElementById('des').value) || 0;
+                const outros = parseInt(document.getElementById('defesa-outros').value) || 0;
+                
+                document.getElementById('defesa-des').value = destreza;
+                document.getElementById('bonus-armadura').value = armadura.def;
+                document.getElementById('bonus-escudo').value = escudo.def;
+                document.getElementById('defesa-total').value = 10 + destreza + armadura.def + escudo.def + outros;
+            };
+
+            const calcularCarga = () => {
+                const forca = parseInt(document.getElementById('for').value) || 0;
+                if (forca >= 1) {
+                    forca_peso = forca * 2;
+                } else {
+                    forca_peso = forca;
+                }
+                document.getElementById('carga-max').value = 10 + forca_peso;
+                let cargaAtual = 0;
+                document.querySelectorAll('#equipamento-tabela tr').forEach(row => {
+                    const espacoInput = row.querySelector('input[name*="-espaco"]');
+                    if (espacoInput) cargaAtual += parseFloat(espacoInput.value) || 0;
+                });
+                document.getElementById('carga-atual').value = cargaAtual;
+            };
+
+            const calcularCDMagia = () => {
+                const attrKey = document.getElementById('magia-cd-attr').value;
+                const modAttr = parseInt(document.getElementById(attrKey).value) || 0;
+                const equip = parseInt(document.getElementById('magia-cd-equip').value) || 0;
+                const poder = parseInt(document.getElementById('magia-cd-poder').value) || 0;
+                const outros = parseInt(document.getElementById('magia-cd-outros').value) || 0;
+                document.getElementById('magia-cd-total').value = 10 + modAttr + equip + poder + outros;
+            };
+
+            const calcularTodasPericias = () => {
+                const nivelEl = document.getElementById('nivel');
+                if (!nivelEl) return;
+                const nivel = parseInt(nivelEl.value) || 0;
+                const meioNivel = Math.floor(nivel / 2);
+                
+                const armaduraKey = document.getElementById('select-armadura').value;
+                const escudoKey = document.getElementById('select-escudo').value;
+                const penalidadeArmadura = (ARMADURAS[armaduraKey] || {pen: 0}).pen;
+                const penalidadeEscudo = (ESCUDOS[escudoKey] || {pen: 0}).pen;
+                const penalidadeTotal = penalidadeArmadura + penalidadeEscudo;
+
+                Object.keys(PERICIAS).forEach(id => {
+                    const pericia = PERICIAS[id];
+                    const modAtributoEl = document.getElementById(pericia.attr);
+                    const treinoCheckbox = document.getElementById(`treino-${id}`);
+                    const outrosEl = document.getElementById(`outros-${id}`);
+                    if(!modAtributoEl || !treinoCheckbox || !outrosEl) return;
+
+                    const modAtributo = parseInt(modAtributoEl.value) || 0;
+                    const outros = parseInt(outrosEl.value) || 0;
+                    let bonusTreino = 0;
+                    if (treinoCheckbox && treinoCheckbox.checked) {
+                        if (nivel >= 15) bonusTreino = 6;
+                        else if (nivel >= 7) bonusTreino = 4;
+                        else bonusTreino = 2;
                     }
-                    trainingBonusInput.value = trainingBonus;
-
-                    const othersBonus = parseInt(skillRow.querySelector('.skill-others').value, 10) || 0;
-                    const level_plus = parseInt(level / 2);
-                    
-                    const total = attrMod + trainingBonus + othersBonus + level_plus;
-                    skillRow.querySelector('.sheet-total').value = total;
+                    const penalidadeAplicada = pericia.penalidade ? penalidadeTotal : 0;
+                    const total = modAtributo + meioNivel + bonusTreino + outros + penalidadeAplicada; // Penalidade é negativa
+                    document.getElementById(`total-${id}`).value = total;
+                    document.getElementById(`meio-nivel-${id}`).value = meioNivel;
+                    document.getElementById(`mod-attr-${id}`).value = modAtributo;
+                    document.getElementById(`treino-val-${id}`).value = bonusTreino;
                 });
-            }
+            };
 
-            function updateDefense() {
-                let total = 10;
-                const dexMod = modifiers['des'];
-                const useDex = document.getElementById('defense-dex-mod').value === 'sim';
-                const armor = parseInt(document.getElementById('defense-armor-bonus').value, 10) || 0;
-                const shield = parseInt(document.getElementById('defense-shield-bonus').value, 10) || 0;
-                const others = parseInt(document.getElementById('defense-others').value, 10) || 0;
+            const recalcularTudo = () => {
+                calcularDefesa();
+                calcularCarga();
+                calcularTodasPericias();
+                calcularCDMagia();
+            };
 
-                if (useDex) {
-                    total += dexMod;
+            // --- FUNÇÕES DE MANIPULAÇÃO DE DADOS (JSON/LocalStorage) ---
+            const getFichaData = () => {
+                const dados = {};
+                document.querySelectorAll('[id]').forEach(el => {
+                    if (el.id && !el.closest('#pericias-tabela-body')) {
+                        if (el.type === 'checkbox') dados[el.id] = el.checked;
+                        else if (el.type !== 'file') dados[el.id] = el.value;
+                    }
+                });
+                document.querySelectorAll('#pericias-tabela-body input').forEach(input => {
+                    if (input.id.startsWith('treino-') || input.id.startsWith('outros-')) {
+                        dados[input.id] = input.type === 'checkbox' ? input.checked : input.value;
+                    }
+                });
+                dados.ataques = [];
+                document.querySelectorAll('#ataques-tabela tr').forEach(row => {
+                    dados.ataques.push({
+                        nome: row.querySelector('[name*="-nome"]').value, bonus: row.querySelector('[name*="-bonus"]').value,
+                        dano: row.querySelector('[name*="-dano"]').value, critico: row.querySelector('[name*="-critico"]').value,
+                        tipo: row.querySelector('[name*="-tipo"]').value, alcance: row.querySelector('[name*="-alcance"]').value,
+                    });
+                });
+                dados.habilidades = Array.from(document.querySelectorAll('#habilidades-lista input')).map(input => input.value);
+                dados.magias = {};
+                Object.keys(CIRCULOS_MAGIA).forEach(circulo => {
+                    dados.magias[circulo] = Array.from(document.querySelectorAll(`#magias-circulo-${circulo}-lista input`)).map(input => input.value);
+                });
+                dados.equipamento = [];
+                document.querySelectorAll('#equipamento-tabela tr').forEach(row => {
+                    dados.equipamento.push({
+                        nome: row.querySelector('[name*="-nome"]').value, espaco: row.querySelector('[name*="-espaco"]').value,
+                        valor: row.querySelector('[name*="-valor"]').value,
+                    });
+                });
+                return dados;
+            };
+            
+            const salvarFormulario = () => {
+                const dados = getFichaData();
+                localStorage.setItem('fichaTormenta20_v10', JSON.stringify(dados));
+            };
+
+            const carregarFormulario = (dados) => {
+                if (!dados) return;
+                Object.keys(dados).forEach(key => {
+                    const el = document.getElementById(key);
+                    if (el) {
+                         if (el.type === 'checkbox') el.checked = dados[key];
+                        else el.value = dados[key];
+                    }
+                });
+                if (dados.ataques && Array.isArray(dados.ataques)) {
+                    document.getElementById('ataques-tabela').innerHTML = '';
+                    dados.ataques.forEach(ataque => adicionarLinhaAtaque(ataque.nome, ataque.bonus, ataque.dano, ataque.critico, ataque.tipo, ataque.alcance));
                 }
-                total += armor;
-                total += shield;
-                total += others;
-
-                document.getElementById('defense-total').value = total;
-            }
-
-            function updateModifier(inputElement) {
-                const container = inputElement.closest('.sheet-outer-container-negative-corner');
-                const attrName = container.dataset.attr;
-                const modField = container.querySelector('.sheet-fake-mod');
-                
-                const modifier = calculateModifier(inputElement.value);
-                modifiers[attrName] = modifier;
-                modField.value = modifier >= 0 ? `+${modifier}` : modifier;
-                
-                updateAllSkills();
-                updateDefense(); 
-            }
-            
-            function updateLoad() {
-                let totalLoad = 0;
-                document.querySelectorAll('#equipment-list .sheet-grid-equipment').forEach(itemRow => {
-                    const quantity = parseFloat(itemRow.querySelector('.item-quantity').value) || 0;
-                    const weight = parseFloat(itemRow.querySelector('.item-weight').value) || 0;
-                    totalLoad += quantity * weight;
-                });
-                document.getElementById('total-load').value = totalLoad.toFixed(2);
-            }
-
-            document.querySelectorAll('.attr-input').forEach(input => {
-                updateModifier(input);
-                input.addEventListener('input', () => updateModifier(input));
-            });
-
-            document.getElementById('char-level').addEventListener('input', updateAllSkills);
-            
-            document.querySelectorAll('.skill-attr, .skill-training, .skill-others').forEach(element => {
-                element.addEventListener('change', updateAllSkills);
-                if(element.classList.contains('skill-others')) {
-                    element.addEventListener('input', updateAllSkills);
+                if (dados.habilidades && Array.isArray(dados.habilidades)) {
+                    document.getElementById('habilidades-lista').innerHTML = '';
+                    dados.habilidades.forEach(habilidade => adicionarLinhaHabilidade(habilidade));
                 }
-            });
+                if (dados.magias && typeof dados.magias === 'object') {
+                    Object.keys(dados.magias).forEach(circulo => {
+                        const lista = document.getElementById(`magias-circulo-${circulo}-lista`);
+                        if(lista) {
+                            lista.innerHTML = '';
+                            dados.magias[circulo].forEach(magia => adicionarLinhaMagia(circulo, magia));
+                        }
+                    });
+                }
+                if (dados.equipamento && Array.isArray(dados.equipamento)) {
+                    document.getElementById('equipamento-tabela').innerHTML = '';
+                    dados.equipamento.forEach(item => adicionarLinhaEquipamento(item.nome, item.espaco, item.valor));
+                }
+                recalcularTudo();
+                salvarFormulario();
+            };
 
-            document.querySelectorAll('#defense-dex-mod, #defense-others').forEach(element => {
-                element.addEventListener('input', updateDefense);
-            });
+            const limparFormulario = () => {
+                const modal = document.getElementById('confirm-modal');
+                modal.classList.remove('hidden');
+                setTimeout(() => modal.classList.remove('opacity-0'), 10);
+                document.getElementById('modal-confirm-btn').onclick = () => {
+                    localStorage.removeItem('fichaTormenta20_v10');
+                    window.location.reload();
+                };
+                document.getElementById('modal-cancel-btn').onclick = () => {
+                     modal.classList.add('opacity-0');
+                     setTimeout(() => modal.classList.add('hidden'), 300);
+                };
+            };
 
-            // Sincronizar Defesa da Armadura e Escudo
-            const armorDefInput = document.getElementById('armor-defense-value');
-            const shieldDefInput = document.getElementById('shield-defense-value');
-            const armorBonusInput = document.getElementById('defense-armor-bonus');
-            const shieldBonusInput = document.getElementById('defense-shield-bonus');
+            const downloadFicha = () => {
+                const dados = getFichaData();
+                const jsonData = JSON.stringify(dados, null, 2);
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const personagemNome = document.getElementById('personagem').value.trim().replace(/\s+/g, '_') || 'personagem';
+                a.href = url;
+                a.download = `${personagemNome}_t20.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
 
-            armorDefInput.addEventListener('input', () => {
-                armorBonusInput.value = armorDefInput.value;
-                updateDefense();
-            });
-            shieldDefInput.addEventListener('input', () => {
-                shieldBonusInput.value = shieldDefInput.value;
-                updateDefense();
-            });
-
-
-            // Sincronizar Vida e Mana
-            const hpMax = document.getElementById('hp-max');
-            const hpCurrent = document.getElementById('hp-current');
-            const hpTemp = document.getElementById('hp-temp');
-            const manaMax = document.getElementById('mana-max');
-            const manaCurrent = document.getElementById('mana-current');
-            const manaTemp = document.getElementById('mana-temp');
-
-            function updateCurrentHP() {
-                const max = parseInt(hpMax.value, 10) || 0;
-                const temp = parseInt(hpTemp.value, 10) || 0;
-                hpCurrent.value = max + temp;
-            }
-
-            function updateCurrentMana() {
-                const max = parseInt(manaMax.value, 10) || 0;
-                const temp = parseInt(manaTemp.value, 10) || 0;
-                manaCurrent.value = max + temp;
-            }
+            const handleFileUpload = (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const dados = JSON.parse(e.target.result);
+                        carregarFormulario(dados);
+                    } catch (error) {
+                        console.error("Erro ao ler o arquivo JSON:", error);
+                        alert("Arquivo inválido. Por favor, selecione um arquivo de ficha JSON válido.");
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = '';
+            };
             
-            hpMax.addEventListener('input', updateCurrentHP);
-            hpTemp.addEventListener('input', updateCurrentHP);
-            manaMax.addEventListener('input', updateCurrentMana);
-            manaTemp.addEventListener('input', updateCurrentMana);
+            const gerarPdfMestre = () => {
+                const app = document.getElementById('app-container');
+                const ficha = document.getElementById('ficha-container');
+                const personagemNome = document.getElementById('personagem').value.trim().replace(/\s+/g, '_') || 'personagem';
+                
+                app.classList.add('print-mode');
 
+                html2pdf().from(ficha).set({
+                    margin: 0, filename: `${personagemNome}_t20.pdf`, image: { type: 'jpeg', quality: 2 },
+                    html2canvas: { scale: 1, useCORS: true }, jsPDF: { unit: 'mm', format: 'a2', orientation: 'portrait' }
+                }).save().finally(() => {
+                    app.classList.remove('print-mode');
+                });
+            };
             
-            // --- Adicionar/Remover Elementos Dinâmicos ---
-
-            function createRemoveButton(elementToRemove) {
-                const removeButton = document.createElement('button');
-                removeButton.type = 'button';
-                removeButton.classList.add('remove-button');
-                removeButton.textContent = 'X';
-                removeButton.addEventListener('click', () => {
-                    elementToRemove.remove();
-                    updateLoad(); // Recalcula a carga ao remover um item
+            // --- FUNÇÕES DE INICIALIZAÇÃO E EVENTOS ---
+            const inicializarPericias = () => {
+                periciasTabelaBody.innerHTML = '';
+                Object.keys(PERICIAS).forEach(id => {
+                    const pericia = PERICIAS[id];
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-red-800/20';
+                    row.innerHTML = `
+                        <td class="py-1 px-1">${pericia.nome}</td>
+                        <td class="py-1 px-1"><input type="number" id="total-${id}" readonly class="w-10 text-center font-bold bg-stone-200 rounded-sm"></td>
+                        <td class="py-1 px-1 text-center hidden sm:table-cell"><input type="number" id="meio-nivel-${id}" readonly class="w-10 text-center bg-transparent"></td>
+                        <td class="py-1 px-1 text-center hidden sm:table-cell"><input type="number" id="mod-attr-${id}" readonly class="w-10 text-center bg-transparent"></td>
+                        <td class="py-1 px-1 text-center hidden sm:table-cell">
+                           <input type="checkbox" id="treino-${id}" class="form-checkbox h-4 w-4 text-red-800 bg-transparent border-red-800 rounded focus:ring-red-700 cursor-pointer">
+                           <input type="number" id="treino-val-${id}" readonly class="w-10 text-center bg-transparent hidden">
+                        </td>
+                        <td class="py-1 px-1 text-center hidden sm:table-cell"><input type="number" id="outros-${id}" value="0" class="w-10 text-center bg-transparent border-b border-red-800/50"></td>
+                    `;
+                    periciasTabelaBody.appendChild(row);
                 });
-                return removeButton;
-            }
+            };
 
-            // Magias
-            document.querySelectorAll('.add-spell-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetListId = this.getAttribute('data-target-list');
-                    const spellListContainer = document.querySelector(`#spell-column-${targetListId} .sheet-containerspelllist`);
-
-                    const newSpell = document.createElement('div');
-                    newSpell.classList.add('sheet-container-single-spell');
-
-                    const spellInput = document.createElement('input');
-                    spellInput.type = 'text';
-                    spellInput.placeholder = 'Nome da Magia';
-                    
-                    newSpell.appendChild(spellInput);
-                    newSpell.appendChild(createRemoveButton(newSpell));
-                    spellListContainer.appendChild(newSpell);
+            const inicializarEquipamentos = () => {
+                const selectArmadura = document.getElementById('select-armadura');
+                const selectEscudo = document.getElementById('select-escudo');
+                Object.keys(ARMADURAS).forEach(key => {
+                    selectArmadura.add(new Option(key, key));
                 });
-            });
-
-            // Ataques
-            document.getElementById('add-attack').addEventListener('click', function() {
-                const attacksList = document.getElementById('attacks-list');
-                const newAttack = document.createElement('div');
-                newAttack.classList.add('sheet-attacksgrid');
-                newAttack.innerHTML = `
-                    <input type="text" placeholder="Nome do Ataque">
-                    <input type="text" value="0">
-                    <input type="text" value="0">
-                    <input type="text" value="0">
-                    <div class="sheet-containercritico">
-                        <input type="text" class="sheet-margem" value="20">
-                        <span class="sheet-divisor"><b>/</b>x</span>
-                        <input type="text" class="sheet-multiplicador" value="2">
-                    </div>
+                Object.keys(ESCUDOS).forEach(key => {
+                    selectEscudo.add(new Option(key, key));
+                });
+            };
+            
+            const adicionarLinhaEquipamento = (nome = '', espaco = '', valor = '') => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-red-800/20';
+                row.innerHTML = `
+                    <td><input type="text" name="equip-nome" value="${nome}" class="w-full bg-transparent p-1 focus:outline-none"></td>
+                    <td class="text-center"><input type="number" name="equip-espaco" value="${espaco}" class="w-12 bg-transparent p-1 text-center focus:outline-none"></td>
+                    <td class="text-center"><input type="text" name="equip-valor" value="${valor}" class="w-12 bg-transparent p-1 text-center focus:outline-none"></td>
                 `;
-                newAttack.appendChild(createRemoveButton(newAttack));
-                attacksList.appendChild(newAttack);
-            });
+                document.getElementById('equipamento-tabela').appendChild(row);
+                row.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('input', () => {
+                        calcularCarga();
+                        salvarFormulario();
+                    });
+                });
+            };
 
-            // Proficiências
-            document.getElementById('add-proficiency').addEventListener('click', function() {
-                const proficienciesList = document.getElementById('proficiencies-list');
-                const newProficiency = document.createElement('div');
-                newProficiency.classList.add('proficiency-item');
-                
+            const adicionarLinhaAtaque = (nome = '', bonus = '', dano = '', critico = '', tipo = '', alcance = '') => {
+                const tbody = document.getElementById('ataques-tabela');
+                const row = document.createElement('tr');
+                row.className = 'border-b border-red-800/20';
+                row.innerHTML = `
+                    <td><input type="text" value="${nome}" class="w-full bg-transparent p-1 focus:outline-none" name="ataque-nome"></td>
+                    <td><input type="text" value="${bonus}" class="w-full bg-transparent p-1 focus:outline-none" name="ataque-bonus"></td>
+                    <td><input type="text" value="${dano}" class="w-full bg-transparent p-1 focus:outline-none" name="ataque-dano"></td>
+                    <td><input type="text" value="${critico}" class="w-full bg-transparent p-1 focus:outline-none" name="ataque-critico"></td>
+                    <td><input type="text" value="${tipo}" class="w-full bg-transparent p-1 focus:outline-none" name="ataque-tipo"></td>
+                    <td><input type="text" value="${alcance}" class="w-full bg-transparent p-1 focus:outline-none" name="ataque-alcance"></td>
+                `;
+                tbody.appendChild(row);
+            };
+
+            const adicionarLinhaHabilidade = (texto = '') => {
+                const container = document.getElementById('habilidades-lista');
                 const input = document.createElement('input');
                 input.type = 'text';
-                input.placeholder = 'Nova proficiência';
+                input.value = texto;
+                input.className = 'w-full bg-transparent p-1 border-b-2 border-red-800/50 focus:outline-none focus:border-red-700';
+                container.appendChild(input);
+            };
 
-                newProficiency.appendChild(input);
-                newProficiency.appendChild(createRemoveButton(newProficiency));
-                proficienciesList.appendChild(newProficiency);
-            });
+            const adicionarLinhaMagia = (circulo, texto = '') => {
+                const container = document.getElementById(`magias-circulo-${circulo}-lista`);
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = texto;
+                input.className = 'w-full bg-transparent p-1 border-b-2 border-red-800/50 focus:outline-none focus:border-red-700';
+                container.appendChild(input);
+            };
 
-            // Equipamentos
-            document.getElementById('add-equipment').addEventListener('click', function() {
-                const equipmentList = document.getElementById('equipment-list');
-                const newEquipment = document.createElement('div');
-                newEquipment.classList.add('sheet-grid-equipment');
-                newEquipment.innerHTML = `
-                    <input type="number" class="item-quantity" value="1" step="1" min="0">
-                    <input type="text" placeholder="Nome do item">
-                    <input type="number" class="item-weight" value="0" step="0.1" min="0">
-                `;
-                newEquipment.appendChild(createRemoveButton(newEquipment));
-                equipmentList.appendChild(newEquipment);
-                updateLoad(); // Atualiza a carga ao adicionar
-            });
+            const inicializarMagias = () => {
+                const container = document.getElementById('magias-circulos');
+                Object.keys(CIRCULOS_MAGIA).forEach(circulo => {
+                    const div = document.createElement('div');
+                    div.className = 'p-2 border-2 border-red-800 rounded-lg';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-center bg-stone-200 p-1 rounded-md">
+                            <h4 class="font-medieval text-red-900">${circulo}º Círculo</h4>
+                            <span class="text-xs font-bold">${CIRCULOS_MAGIA[circulo]}</span>
+                            <button class="add-magia-btn bg-red-800 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-lg" data-circulo="${circulo}">+</button>
+                        </div>
+                        <div id="magias-circulo-${circulo}-lista" class="mt-2 space-y-1"></div>
+                    `;
+                    container.appendChild(div);
+                });
+            };
+
+            const setupEventListeners = () => {
+                document.getElementById('app-container').addEventListener('input', salvarFormulario);
+                document.getElementById('app-container').addEventListener('change', salvarFormulario);
+                const inputsToRecalculate = ['nivel', 'for', 'des', 'con', 'int', 'sab', 'car', 'defesa-outros', 'magia-cd-attr', 'magia-cd-outros', 'divindade', 'magia-cd-equip', 'magia-cd-poder'];
+                inputsToRecalculate.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        const eventType = element.tagName === 'SELECT' ? 'change' : 'input';
+                        element.addEventListener(eventType, recalcularTudo);
+                    } else {
+                        console.error(`Elemento com ID '${id}' não encontrado durante a configuração dos listeners.`);
+                    }
+                });
+                document.querySelectorAll('.atributo-seta').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const attr = this.closest('.atributo-container').dataset.attr;
+                        const input = document.getElementById(attr);
+                        input.value = parseInt(input.value) + (this.dataset.action === 'increment' ? 1 : -1);
+                        input.dispatchEvent(new Event('input', { bubbles: true }));
+                    });
+                });
+                periciasTabelaBody.addEventListener('change', (e) => { if (e.target.type === 'checkbox') recalcularTudo(); });
+                periciasTabelaBody.addEventListener('input', (e) => { if (e.target.id.startsWith('outros-')) recalcularTudo(); });
+                
+                document.getElementById('select-armadura').addEventListener('change', recalcularTudo);
+                document.getElementById('select-escudo').addEventListener('change', recalcularTudo);
+
+                document.getElementById('btn-download').addEventListener('click', downloadFicha);
+                document.getElementById('btn-upload').addEventListener('click', () => document.getElementById('upload-input').click());
+                document.getElementById('upload-input').addEventListener('change', handleFileUpload);
+                document.getElementById('btn-pdf').addEventListener('click', gerarPdfMestre);
+                document.getElementById('btn-limpar').addEventListener('click', limparFormulario);
+                document.getElementById('add-equip-row').addEventListener('click', () => adicionarLinhaEquipamento());
+                document.getElementById('add-habilidade-row').addEventListener('click', () => adicionarLinhaHabilidade());
+                document.getElementById('add-ataque-row').addEventListener('click', () => adicionarLinhaAtaque());
+                document.getElementById('magias-circulos').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('add-magia-btn')) {
+                        adicionarLinhaMagia(e.target.dataset.circulo);
+                    }
+                });
+            };
+
+            const carregarDadosIniciais = () => {
+                const dadosSalvos = localStorage.getItem('fichaTormenta20_v10');
+                if (dadosSalvos) {
+                    try { carregarFormulario(JSON.parse(dadosSalvos)); } catch (e) {
+                        console.error("Falha ao carregar dados salvos.", e);
+                        localStorage.removeItem('fichaTormenta20_v10');
+                    }
+                } else {
+                    for(let i=0; i<3; i++) adicionarLinhaAtaque();
+                    for(let i=0; i<5; i++) adicionarLinhaEquipamento();
+                    adicionarLinhaHabilidade();
+                }
+            };
             
-            // Adiciona listener para a lista de equipamentos para recalcular a carga
-            document.getElementById('equipment-list').addEventListener('input', updateLoad);
-
-
-            // Initial calculation on load
-            updateAllSkills();
-            updateDefense();
+            inicializarPericias();
+            inicializarEquipamentos();
+            inicializarMagias();
+            carregarDadosIniciais();
+            recalcularTudo();
+            setupEventListeners();
         });

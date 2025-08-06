@@ -1,543 +1,223 @@
 
 {% extends "layout.html" %}
 {% block content %}
-<div id="ficha" class="charsheet sheet-main">
+    <div id="app-container" class="max-w-5xl mx-auto">
+        <!-- Botões de Ação -->
+        <div class="flex flex-wrap justify-center gap-4 mb-6 no-print">
+            <button id="btn-download" class="bg-blue-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                Download Ficha
+            </button>
+            <button id="btn-upload" class="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                Upload Ficha
+            </button>
+            <input type="file" id="upload-input" class="hidden" accept=".json">
+            <button id="btn-pdf" class="bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                Baixar PDF
+            </button>
+            <button id="btn-limpar" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                Limpar Ficha
+            </button>
+        </div>
 
-       <form class="sheetform" autocomplete="off">
-            <div class="sheet-main">
-                <div class="sheet-left-container">
-                    <div class="sheet-header-info">
-                        <div class="sheet-input-with-text-bellow sheet-char-name">
-                            <input name="attr_character_name" type="text" spellcheck="false" value="">
-                            <span>Nome</span>
-                        </div>
-                        <div class="sheet-input-with-text-bellow">
-                            <input name="attr_trace" type="text" spellcheck="false" value="">
-                            <span>Raça</span>
-                        </div>
-                        <div class="sheet-input-with-text-bellow">
-                            <input name="attr_torigin" type="text" spellcheck="false" value="">
-                            <span>Origem</span>
-                        </div>
-                        <div class="sheet-input-with-text-bellow">
-                            <input name="attr_class" type="text" spellcheck="false" value="">
-                            <span>Classe</span>
-                        </div>
+        <!-- Container da Ficha -->
+        <div id="ficha-container" class="parchment p-6 rounded-lg">
+            
+            <!-- Cabeçalho -->
+            <header class="border-b-2 border-red-900 pb-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="personagem" class="font-medieval text-red-900 text-lg">Nome do Personagem</label>
+                        <input type="text" id="personagem" name="personagem" class="w-full p-2 bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600 transition">
                     </div>
-
-                    <div class="sheet-character-attributes">
-                        <!-- FOR -->
-                        <div class="sheet-outer-container-negative-corner" data-attr="for">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-button-title-attribute">FOR</div>
-                                    <input type="text" class="sheet-fake-mod" id="mod-for" value="0" disabled>
-                                </div>
-                            </div>
-                            <div class="sheet-oval">
-                                <input value="0" type="number" class="attr-input">
-                            </div>
-                        </div>
-                        <!-- DES -->
-                        <div class="sheet-outer-container-negative-corner" data-attr="des">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-button-title-attribute">DES</div>
-                                    <input type="text" class="sheet-fake-mod" id="mod-des" value="0" disabled>
-                                </div>
-                            </div>
-                            <div class="sheet-oval">
-                                <input value="0" type="number" class="attr-input">
-                            </div>
-                        </div>
-                        <!-- CON -->
-                        <div class="sheet-outer-container-negative-corner" data-attr="con">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-button-title-attribute">CON</div>
-                                    <input type="text" class="sheet-fake-mod" id="mod-con" value="0" disabled>
-                                </div>
-                            </div>
-                            <div class="sheet-oval">
-                                <input value="0" type="number" class="attr-input">
-                            </div>
-                        </div>
-                        <!-- INT -->
-                        <div class="sheet-outer-container-negative-corner" data-attr="int">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-button-title-attribute">INT</div>
-                                    <input type="text" class="sheet-fake-mod" id="mod-int" value="0" disabled>
-                                </div>
-                            </div>
-                            <div class="sheet-oval">
-                                <input value="0" type="number" class="attr-input">
-                            </div>
-                        </div>
-                        <!-- SAB -->
-                        <div class="sheet-outer-container-negative-corner" data-attr="sab">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-button-title-attribute">SAB</div>
-                                    <input type="text" class="sheet-fake-mod" id="mod-sab" value="0" disabled>
-                                </div>
-                            </div>
-                            <div class="sheet-oval">
-                                <input value="0" type="number" class="attr-input">
-                            </div>
-                        </div>
-                        <!-- CAR -->
-                        <div class="sheet-outer-container-negative-corner" data-attr="car">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-button-title-attribute">CAR</div>
-                                    <input type="text" class="sheet-fake-mod" id="mod-car" value="0" disabled>
-                                </div>
-                            </div>
-                            <div class="sheet-oval">
-                                <input value="0" type="number" class="attr-input">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sheet-pseudo-attributes">
-                        <div class="sheet-container-negative-corner sheet-container-pvs-mps">
-                            <div class="sheet-inside-negative-corner">
-                                <div class="sheet-box-title">Pontos de Vida</div>
-                                <div class="sheet-content-centered sheet-border-right">
-                                    <input type="number" value="10" id="hp-max">
-                                </div>
-                                <div class="sheet-content-centered">
-                                    <input type="number" value="10" id="hp-current">
-                                </div>
-                                <div class="sheet-content-centered sheet-border-left">
-                                    <input type="number" value="10" id="hp-temp">
-                                </div>
-                                <div class="sheet-content-centered sheet-smaller-text">Máximos</div>
-                                <div class="sheet-content-centered sheet-smaller-text">Atuais</div>
-                                <div class="sheet-content-centered sheet-smaller-text">Temporários</div>
-                            </div>
-                        </div>
-                        <div class="sheet-container-negative-corner sheet-container-pvs-mps">
-                            <div class="sheet-inside-negative-corner">
-                                <div class="sheet-box-title">Pontos de Mana</div>
-                                <div class="sheet-content-centered sheet-border-right">
-                                    <input type="number" value="1" id="mana-max">
-                                </div>
-                                <div class="sheet-content-centered">
-                                    <input type="number" value="1" id="mana-current">
-                                </div>
-                                <div class="sheet-content-centered sheet-border-left">
-                                    <input type="number" value="1" id="mana-temp">
-                                </div>
-                                <div class="sheet-content-centered sheet-smaller-text">Máximos</div>
-                                <div class="sheet-content-centered sheet-smaller-text">Atuais</div>
-                                <div class="sheet-content-centered sheet-smaller-text">Temporários</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sheet-attacks-container">
-                        <div class="sheet-container-negative-corner">
-                            <div class="sheet-inside-negative-corner">
-                                <div class="sheet-attacksgrid sheet-header">
-                                    <div class="sheet-grid-title">Nome do Ataque</div>
-                                    <div class="sheet-small-title">Bônus</div>
-                                    <div class="sheet-small-title">Dano</div>
-                                    <div class="sheet-small-title">Dano Extra</div>
-                                    <div class="sheet-small-title">Crítico</div>
-                                    <div></div>
-                                </div>
-                                <div id="attacks-list">
-                                    <!-- Ataques serão adicionados aqui -->
-                                </div>
-                                <button type="button" id="add-attack" class="action-button">Adicionar Ataque</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sheet-defense-and-proeficience-container">
-                        <div class="sheet-container-defense-armor-shield">
-                            <div class="sheet-container-negative-corner sheet-container-defense">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-grid-title">Defesa</div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div class="sheet-small-title">Mod. Des</div>
-                                    <div></div>
-                                    <div class="sheet-small-title">Armadura</div>
-                                    <div></div>
-                                    <div class="sheet-small-title">Escudo</div>
-                                    <div></div>
-                                    <div class="sheet-small-title">Outros</div>
-                                    
-                                    <div>
-                                        <input id="defense-total" disabled value="0" type="text">
-                                    </div>
-                                    <div class="sheet-signal">=</div>
-                                    <div class="sheet-big-signal">10</div>
-                                    <div class="sheet-signal">+</div>
-                                    <select id="defense-dex-mod">
-                                        <option value="nao">Não</option>
-                                        <option value="sim" selected>Sim</option>
-                                    </select>
-                                    <div class="sheet-signal">+</div>
-                                    <div>
-                                        <input id="defense-armor-bonus" type="number" value="0" disabled>
-                                    </div>
-                                    <div class="sheet-signal">+</div>
-                                    <div>
-                                        <input id="defense-shield-bonus" type="number" value="0" disabled>
-                                    </div>
-                                    <div class="sheet-signal">+</div>
-                                    <div>
-                                        <input id="defense-others" type="number" value="0">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="sheet-container-negative-corner sheet-container-armor-shield">
-                                <div class="sheet-inside-negative-corner">
-                                    <div class="sheet-grid-title">Armadura &amp; Escudo</div>
-                                    <div class="sheet-small-title">Defesa</div>
-                                    <div class="sheet-small-title">Penalidade</div>
-                                    <div>
-                                        <input type="text" value="Armadura">
-                                    </div>
-                                    <div>
-                                        <input id="armor-defense-value" type="number" value="0">
-                                    </div>
-                                    <div>
-                                        <input type="number" value="0">
-                                    </div>
-                                    <div>
-                                        <input type="text" value="Escudo">
-                                    </div>
-                                    <div>
-                                        <input id="shield-defense-value" type="number" value="0">
-                                    </div>
-                                    <div>
-                                        <input type="number" value="0">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sheet-box-proficiencies">
-                            <div class="sheet-container-negative-corner">
-                                <div class="sheet-inside-negative-corner" style="display: flex; flex-direction: column; align-items: flex-start;">
-                                    <div class="sheet-default-title">Proficiências</div>
-                                    <div id="proficiencies-list" style="width: 100%; flex-grow: 1; padding: 5px; overflow-y: auto;">
-                                        <!-- Proficiências aqui -->
-                                    </div>
-                                    <button type="button" id="add-proficiency" class="action-button" style="margin-bottom: 5px;">Adicionar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="sheet-spells">
-                        <div class="sheet-container-negative-corner">
-                            <div class="sheet-inside-negative-corner">
-                                <div class="sheet-default-title">Magias</div>
-                                <div class="sheet-content-grid">
-                                    <div class="sheet-spellcolumn" id="spell-column-1">
-                                        <div class="sheet-cicloheader">
-                                            <div class="sheet-ciclo-title">1º Círculo</div>
-                                            <div class="sheet-ciclo-cost">1 PM</div>
-                                        </div>
-                                        <div class="sheet-containerspelllist"></div>
-                                        <button type="button" class="action-button add-spell-button" data-target-list="1">Adicionar</button>
-                                    </div>
-                                    <div class="sheet-spellcolumn" id="spell-column-2">
-                                        <div class="sheet-cicloheader">
-                                            <div class="sheet-ciclo-title">2º Círculo</div>
-                                            <div class="sheet-ciclo-cost">3 PM</div>
-                                        </div>
-                                        <div class="sheet-containerspelllist"></div>
-                                        <button type="button" class="action-button add-spell-button" data-target-list="2">Adicionar</button>
-                                    </div>
-                                </div>
-                                <div class="sheet-content-grid" style="margin-top: 10px;">
-                                    <div class="sheet-spellcolumn" id="spell-column-3">
-                                        <div class="sheet-cicloheader">
-                                            <div class="sheet-ciclo-title">3º Círculo</div>
-                                            <div class="sheet-ciclo-cost">6 PM</div>
-                                        </div>
-                                        <div class="sheet-containerspelllist"></div>
-                                        <button type="button" class="action-button add-spell-button" data-target-list="3">Adicionar</button>
-                                    </div>
-                                    <div class="sheet-spellcolumn" id="spell-column-4">
-                                        <div class="sheet-cicloheader">
-                                            <div class="sheet-ciclo-title">4º Círculo</div>
-                                            <div class="sheet-ciclo-cost">10 PM</div>
-                                        </div>
-                                        <div class="sheet-containerspelllist"></div>
-                                        <button type="button" class="action-button add-spell-button" data-target-list="4">Adicionar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div>
+                        <label for="jogador" class="font-medieval text-red-900 text-lg">Jogador(a)</label>
+                        <input type="text" id="jogador" name="jogador" class="w-full p-2 bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600 transition">
                     </div>
                 </div>
+            </header>
 
-                <div class="sheet-right-container">
-                    <div class="sheet-logo-level">
-                        <div class="sheet-char-level-container">
-                            <div class="sheet-total-level">
-                                <span>Nível do Personagem</span>
-                                <input type="number" value="1" id="char-level">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8">
+                <!-- COLUNA DA ESQUERDA -->
+                <div class="space-y-6">
+                    <!-- Informações Básicas -->
+                    <section class="grid grid-cols-5 gap-4">
+                        <div class="col-span-1"><label for="raca" class="font-medieval text-red-900">Raça</label><select id="raca" name="raca" class="w-full p-1 bg-transparent border-b-2 border-red-800 rounded-md focus:outline-none focus:border-red-600 transition"><option value="">Selecione</option><option>Humano</option><option>Anão</option><option>Dahllan</option><option>Elfo</option><option>Goblin</option><option>Lefou</option><option>Minotauro</option><option>Qareen</option><option>Golem</option><option>Hynne</option><option>Kliren</option><option>Medusa</option><option>Osteon</option><option>Sereia/Tritão</option><option>Sílfide</option><option>Suraggel</option><option>Trog</option></select></div>
+                        <div class="col-span-2"><label for="origem" class="font-medieval text-red-900">Origem</label><select id="origem" name="origem" class="w-full p-1 bg-transparent border-b-2 border-red-800 rounded-md focus:outline-none focus:border-red-600 transition"><option value="">Selecione</option><option>Acólito</option><option>Amnésico</option><option>Aristocrata</option><option>Artesão</option><option>Artista</option><option>Assistente de Laboratório</option><option>Batedor</option><option>Capanga</option><option>Charlatão</option><option>Circense</option><option>Combatente de Arena</option><option>Criminoso</option><option>Curandeiro</option><option>Eremita</option><option>Escravo</option><option>Estudioso</option><option>Fazendeiro</option><option>Forasteiro</option><option>Guarda</option><option>Herdeiro</option><option>Herói Camponês</option><option>Marujo</option><option>Mateiro</option><option>Membro de Guilda</option><option>Mercador</option><option>Minerador</option><option>Nômade</option><option>Pivete</option><option>Refugiado</option><option>Seguidor</option><option>Selvagem</option><option>Soldado</option><option>Taverneiro</option><option>Trabalhador</option><option>Outra</option></select></div>
+                        <div class="col-span-2"><label for="classe" class="font-medieval text-red-900">Classe</label><select id="classe" name="classe" class="w-full p-1 bg-transparent border-b-2 border-red-800 rounded-md focus:outline-none focus:border-red-600 transition"><option value="">Selecione</option><option>Arcanista</option><option>Bárbaro</option><option>Bardo</option><option>Bucaneiro</option><option>Caçador</option><option>Cavaleiro</option><option>Clérigo</option><option>Druida</option><option>Guerreiro</option><option>Inventor</option><option>Ladino</option><option>Lutador</option><option>Nobre</option><option>Paladino</option></select></div>
+                    </section>
+
+                    <!-- Atributos -->
+                    <section class="grid grid-cols-6 gap-2 text-center">
+                        <div class="atributo-container" data-attr="for"><label class="font-medieval text-red-900 text-lg">FOR</label><div class="flex flex-col items-center justify-center"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="increment">▲</button><input type="number" id="for" name="for" value="0" min="-5" max="10" class="w-14 h-14 text-3xl font-bold text-center bg-transparent border-2 border-red-800 rounded-lg my-1"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="decrement">▼</button></div></div>
+                        <div class="atributo-container" data-attr="des"><label class="font-medieval text-red-900 text-lg">DES</label><div class="flex flex-col items-center justify-center"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="increment">▲</button><input type="number" id="des" name="des" value="0" min="-5" max="10" class="w-14 h-14 text-3xl font-bold text-center bg-transparent border-2 border-red-800 rounded-lg my-1"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="decrement">▼</button></div></div>
+                        <div class="atributo-container" data-attr="con"><label class="font-medieval text-red-900 text-lg">CON</label><div class="flex flex-col items-center justify-center"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="increment">▲</button><input type="number" id="con" name="con" value="0" min="-5" max="10" class="w-14 h-14 text-3xl font-bold text-center bg-transparent border-2 border-red-800 rounded-lg my-1"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="decrement">▼</button></div></div>
+                        <div class="atributo-container" data-attr="int"><label class="font-medieval text-red-900 text-lg">INT</label><div class="flex flex-col items-center justify-center"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="increment">▲</button><input type="number" id="int" name="int" value="0" min="-5" max="10" class="w-14 h-14 text-3xl font-bold text-center bg-transparent border-2 border-red-800 rounded-lg my-1"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="decrement">▼</button></div></div>
+                        <div class="atributo-container" data-attr="sab"><label class="font-medieval text-red-900 text-lg">SAB</label><div class="flex flex-col items-center justify-center"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="increment">▲</button><input type="number" id="sab" name="sab" value="0" min="-5" max="10" class="w-14 h-14 text-3xl font-bold text-center bg-transparent border-2 border-red-800 rounded-lg my-1"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="decrement">▼</button></div></div>
+                        <div class="atributo-container" data-attr="car"><label class="font-medieval text-red-900 text-lg">CAR</label><div class="flex flex-col items-center justify-center"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="increment">▲</button><input type="number" id="car" name="car" value="0" min="-5" max="10" class="w-14 h-14 text-3xl font-bold text-center bg-transparent border-2 border-red-800 rounded-lg my-1"><button class="atributo-seta text-red-800 text-lg font-bold" data-action="decrement">▼</button></div></div>
+                    </section>
+
+                    <!-- PV e PM -->
+                    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-4 border-2 border-red-800 rounded-lg text-center"><h3 class="font-medieval text-red-900 text-xl mb-2">Pontos de Vida</h3><div class="flex justify-around items-center"><div><label for="pv-max" class="block text-sm">Máx.</label><input type="number" id="pv-max" name="pv-max" value="0" class="w-20 p-2 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div><div><label for="pv-atuais" class="block text-sm">Atuais</label><input type="number" id="pv-atuais" name="pv-atuais" value="0" class="w-20 p-2 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div></div></div>
+                        <div class="p-4 border-2 border-red-800 rounded-lg text-center"><h3 class="font-medieval text-red-900 text-xl mb-2">Pontos de Mana</h3><div class="flex justify-around items-center"><div><label for="pm-max" class="block text-sm">Máx.</label><input type="number" id="pm-max" name="pm-max" value="0" class="w-20 p-2 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div><div><label for="pm-atuais" class="block text-sm">Atuais</label><input type="number" id="pm-atuais" name="pm-atuais" value="0" class="w-20 p-2 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div></div></div>
+                    </section>
+
+                    <!-- Ataques -->
+                    <section>
+                         <h3 class="font-medieval text-red-900 text-2xl border-b-2 border-red-900 pb-2 mb-4">Ataques</h3>
+                         <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-red-900 uppercase"><tr><th class="p-1">Ataque</th><th class="p-1">Bônus</th><th class="p-1">Dano</th><th class="p-1">Crítico</th><th class="p-1">Tipo</th><th class="p-1">Alcance</th></tr></thead>
+                                <tbody id="ataques-tabela"></tbody>
+                            </table>
+                            <button id="add-ataque-row" class="mt-2 text-sm text-red-800 hover:text-red-600">+ Adicionar Ataque</button>
+                         </div>
+                    </section>
+
+                    <!-- Defesa e outros -->
+                    <section class="space-y-4">
+                        <div class="p-4 border-2 border-red-800 rounded-lg text-center flex flex-col justify-center">
+                             <h3 class="font-medieval text-red-900 text-xl mb-4">Defesa</h3>
+                             <div class="flex flex-col items-center justify-center gap-4">
+                                 <div class="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+                                    <span class="text-2xl font-bold">10 +</span>
+                                    <div class="flex flex-col items-center"><label for="defesa-des" class="text-xs">Destreza</label><input type="number" id="defesa-des" readonly class="w-12 p-1 text-center bg-stone-200 border border-red-800 rounded-md"></div>
+                                    <span class="text-2xl font-bold">+</span>
+                                    <div class="flex flex-col items-center"><label for="bonus-armadura" class="text-xs">Armadura</label><input type="number" id="bonus-armadura" readonly class="w-12 p-1 text-center bg-stone-200 border border-red-800 rounded-md"></div>
+                                    <span class="text-2xl font-bold">+</span>
+                                    <div class="flex flex-col items-center"><label for="bonus-escudo" class="text-xs">Escudo</label><input type="number" id="bonus-escudo" readonly class="w-12 p-1 text-center bg-stone-200 border border-red-800 rounded-md"></div>
+                                    <span class="text-2xl font-bold">+</span>
+                                    <div class="flex flex-col items-center"><label for="defesa-outros" class="text-xs">Outros</label><input type="number" id="defesa-outros" value="0" class="w-12 p-1 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div>
+                                    <span class="text-2xl font-bold">=</span>
+                                 </div>
+                                 <div><input type="number" id="defesa-total" readonly class="w-20 h-20 text-4xl font-bold text-center bg-transparent border-2 border-red-800 rounded-full"></div>
+                             </div>
+                        </div>
+                        <div class="p-4 border-2 border-red-800 rounded-lg space-y-2">
+                            <div class="grid grid-cols-6 gap-2 text-center text-xs font-medieval text-red-900">
+                                <div class="col-span-4 text-left">ARMADURA & ESCUDO</div>
+                                <div>Defesa</div>
+                                <div>Penalidade</div>
+                            </div>
+                            <div class="grid grid-cols-6 gap-2 items-center">
+                                <select id="select-armadura" class="col-span-4 w-full bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600 transition"></select>
+                                <input type="number" id="armadura-defesa-display" readonly class="w-full p-1 text-center bg-stone-200 border border-red-800 rounded-md">
+                                <input type="number" id="armadura-penalidade-display" readonly class="w-full p-1 text-center bg-stone-200 border border-red-800 rounded-md">
+                            </div>
+                            <div class="grid grid-cols-6 gap-2 items-center">
+                                <select id="select-escudo" class="col-span-4 w-full bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600 transition"></select>
+                                <input type="number" id="escudo-defesa-display" readonly class="w-full p-1 text-center bg-stone-200 border border-red-800 rounded-md">
+                                <input type="number" id="escudo-penalidade-display" readonly class="w-full p-1 text-center bg-stone-200 border border-red-800 rounded-md">
                             </div>
                         </div>
-                    </div>
-                    <div class="sheet-skills-container">
-                        <div class="sheet-container-negative-corner">
-                            <div class="sheet-inside-negative-corner">
-                                <div class="sheet-skill-grid-template sheet-header">
-                                    <div class="sheet-grid-title sheet-pericias-titulo">Perícias</div>
-                                    <div class="sheet-grid-title" style="grid-column: 4;">Total</div>
-                                    <div class="sheet-small-title" style="grid-column: 8;">Treino</div>
-                                    <div class="sheet-small-title" style="grid-column: 10;">Outros</div>
+                        <div class="p-4 border-2 border-red-800 rounded-lg flex flex-col">
+                            <h3 class="font-medieval text-red-900 text-xl mb-2 text-center">Proficiências & Outras Características</h3>
+                            <textarea id="proficiencias" name="proficiencias" class="w-full flex-grow p-2 bg-transparent border-2 border-red-800/30 rounded-lg focus:outline-none focus:border-red-600 transition h-24"></textarea>
+                        </div>
+                    </section>
+                    
+                    <!-- Habilidades -->
+                    <section>
+                         <h3 class="font-medieval text-red-900 text-2xl border-b-2 border-red-900 pb-2 mb-4">Habilidades</h3>
+                         <div id="habilidades-lista" class="space-y-2"></div>
+                         <button id="add-habilidade-row" class="mt-2 text-sm text-red-800 hover:text-red-600">+ Adicionar Habilidade</button>
+                    </section>
+
+                    <!-- Magias -->
+                    <section class="mt-6">
+                        <h3 class="font-medieval text-red-900 text-2xl border-b-2 border-red-900 pb-2 mb-4 text-center">Magias</h3>
+                        <div class="p-4 border-2 border-red-800 rounded-lg text-center mb-4">
+                            <div class="flex flex-col items-center justify-center gap-4">
+                                <div class="flex items-center justify-center gap-2 sm:gap-3 flex-wrap">
+                                    <span class="font-bold text-xl">10 +</span>
+                                    <div class="flex flex-col items-center">
+                                        <label for="magia-cd-attr" class="text-xs">Atributo</label>
+                                        <select id="magia-cd-attr" class="w-20 bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600 transition">
+                                            <option value="int">INT</option>
+                                            <option value="sab">SAB</option>
+                                            <option value="car">CAR</option>
+                                        </select>
+                                    </div>
+                                    <span class="text-xl font-bold">+</span>
+                                    <div class="flex flex-col items-center"><label for="magia-cd-equip" class="text-xs">Equip.</label><input type="number" id="magia-cd-equip" value="0" class="w-12 p-1 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div>
+                                    <span class="text-xl font-bold">+</span>
+                                    <div class="flex flex-col items-center"><label for="magia-cd-poder" class="text-xs">Poder</label><input type="number" id="magia-cd-poder" value="0" class="w-12 p-1 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div>
+                                    <span class="text-xl font-bold">+</span>
+                                    <div class="flex flex-col items-center"><label for="magia-cd-outros" class="text-xs">Outros</label><input type="number" id="magia-cd-outros" value="0" class="w-12 p-1 text-center bg-transparent border-b-2 border-red-800 focus:outline-none focus:border-red-600"></div>
+                                    <span class="text-xl font-bold">=</span>
                                 </div>
-                                <!-- Lista de Perícias -->
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Acrobacia</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Adestramento</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Atletismo</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for" selected>FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Atuação</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Cavalgar</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Conhecimento</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Cura</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Diplomacia</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Enganação</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Fortitude</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con" selected>CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Furtividade</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Guerra</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Iniciativa</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Intimidação</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Intuição</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Investigação</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Jogatina</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car" selected>CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Ladinagem</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Luta</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for" selected>FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Misticismo</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Nobreza</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-oficio"><span>Ofício</span><input class="sheet-nome-oficio" type="text"></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-oficio"><span>Ofício</span><input class="sheet-nome-oficio" type="text"></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int" selected>INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Percepção</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Pilotagem</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Pontaria</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Reflexos</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des" selected>DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab">SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Religião</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Sobrevivência</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
-                                </div>
-                                <div class="sheet-skill-grid-template sheet-skill-list">
-                                    <div class="sheet-signal"><label class="sheet-fake-checkbox"><input type="checkbox" class="skill-training"><div class="sheet-fake-checkbox-status"></div></label></div>
-                                    <div class="sheet-skill-name"><span>Vontade</span></div>
-                                    <div class="sheet-signal">=</div><input class="sheet-total" type="text" value="0" disabled><div class="sheet-signal">+</div>
-                                    <select class="skill-attr"><option value="for">FOR</option><option value="des">DES</option><option value="con">CON</option><option value="int">INT</option><option value="sab" selected>SAB</option><option value="car">CAR</option></select>
-                                    <div class="sheet-signal">+</div><input type="text" class="skill-training-bonus" value="0" disabled><div class="sheet-signal">+</div><input type="number" class="skill-others" value="0">
+                                <div class="flex items-center justify-center">
+                                    <span class="font-medieval text-4xl font-bold text-red-900 mr-2">CD</span>
+                                    <input type="number" id="magia-cd-total" readonly class="w-24 h-24 text-4xl font-bold text-center bg-transparent border-2 border-red-800 rounded-full">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="sheet-equipment-container">
-                        <div class="sheet-container-negative-corner">
-                            <div class="sheet-inside-negative-corner">
-                                <div class="sheet-grid-equipment">
-                                    <div class="sheet-small-title">QTD.</div>
-                                    <div class="sheet-grid-title">Equipamentos</div>
-                                    <div class="sheet-small-title">Peso</div>
-                                    <div></div>
-                                </div>
-                                <div id="equipment-list">
-                                    <!-- Equipamentos serão adicionados aqui -->
-                                </div>
-                                <button type="button" id="add-equipment" class="action-button">Adicionar Equipamento</button>
-                                <div class="sheet-container-money">
-                                    <span>T$:</span>
-                                    <input type="text" value="0">    
-                                    <span>TO:</span>
-                                    <input type="text" value="0">  
-                                    <span class="sheet-cargaspan">Carga:</span>
-                                    <input id="total-load" class="sheet-cargainput" type="text" value="0" readonly>            
-                                </div>
-                            </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="magias-circulos">
+                            <!-- Círculos de Magia serão gerados aqui -->
                         </div>
+                    </section>
+                </div>
+
+                <!-- COLUNA DA DIREITA -->
+                <div class="space-y-6">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-2"><label for="divindade" class="font-medieval text-red-900">Divindade</label><select id="divindade" name="divindade" class="w-full p-1 bg-transparent border-b-2 border-red-800 rounded-md focus:outline-none focus:border-red-600 transition"><option value="">Selecione</option><option>Nenhuma</option><option>Aharadak</option><option>Allihanna</option><option>Arsenal</option><option>Azgher</option><option>Grande Oceano</option><option>Hyninn</option><option>Kallyadranoch</option><option>Khalmyr</option><option>Lena</option><option>Lin-Wu</option><option>Marah</option><option>Megalokk</option><option>Nimb</option><option>Oceano</option><option>Sszzaas</option><option>Tanna-Toh</option><option>Tenebra</option><option>Thwor</option><option>Thyatis</option><option>Valkaria</option><option>Wynna</option></select></div>
+                        <div><label for="nivel" class="font-medieval text-red-900">Nível</label><input type="number" id="nivel" name="nivel" min="1" max="20" value="1" class="w-full p-1 text-center bg-transparent border-b-2 border-red-800 rounded-md focus:outline-none focus:border-red-600 transition"></div>
                     </div>
+                    <!-- Perícias -->
+                    <section>
+                        <h3 class="font-medieval text-red-900 text-2xl border-b-2 border-red-900 pb-2 mb-4">Perícias</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-red-900 uppercase">
+                                    <tr>
+                                        <th class="py-2 px-1">Perícia</th>
+                                        <th class="py-2 px-1 text-center">Total</th>
+                                        <th class="py-2 px-1 text-center hidden sm:table-cell">1/2 Nível</th>
+                                        <th class="py-2 px-1 text-center hidden sm:table-cell">Mod. Atr.</th>
+                                        <th class="py-2 px-1 text-center hidden sm:table-cell">Treino</th>
+                                        <th class="py-2 px-1 text-center hidden sm:table-cell">Outros</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pericias-tabela-body"></tbody>
+                            </table>
+                        </div>
+                        <p class="text-xs mt-2 text-gray-600">✠ Sofre penalidade de armadura. ✯ Exige treinamento.</p>
+                    </section>
+
+                    <!-- Equipamento -->
+                    <section class="mt-6">
+                        <h3 class="font-medieval text-red-900 text-2xl border-b-2 border-red-900 pb-2 mb-4">Equipamento</h3>
+                         <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-red-900 uppercase"><tr><th class="p-1 w-3/5">Item</th><th class="p-1 w-1/5 text-center">Espaços</th><th class="p-1 w-1/5 text-center">T$</th></tr></thead>
+                                <tbody id="equipamento-tabela"></tbody>
+                            </table>
+                            <button id="add-equip-row" class="mt-2 text-sm text-red-800 hover:text-red-600">+ Adicionar item</button>
+                         </div>
+                         <div class="mt-4 grid grid-cols-3 gap-4 text-center">
+                             <div><label for="carga-atual" class="block text-sm font-medieval text-red-900">Carga Atual</label><input type="text" id="carga-atual" name="carga-atual" readonly class="w-full p-1 bg-stone-200 border-b-2 border-red-800 text-center"></div>
+                             <div><label for="carga-max" class="block text-sm font-medieval text-red-900">Carga Máx.</label><input type="text" id="carga-max" name="carga-max" readonly class="w-full p-1 bg-stone-200 border-b-2 border-red-800 text-center"></div>
+                             <div><label for="dinheiro" class="block text-sm font-medieval text-red-900">T$ Total</label><input type="text" id="dinheiro" name="dinheiro" placeholder="0" class="w-full p-1 bg-transparent border-b-2 border-red-800 text-center focus:outline-none focus:border-red-600"></div>
+                         </div>
+                    </section>
                 </div>
             </div>
-        </form>
-    </div>    
+            
+            <!-- Rodapé -->
+            <footer class="text-center mt-8 pt-4 border-t-2 border-red-900"><p class="text-xs text-gray-600">Ficha de Tormenta 20. É permitida a reprodução para uso pessoal.</p></footer>
+        </div>
+    </div>
+    
+    <!-- Modal de Confirmação -->
+    <div id="confirm-modal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden opacity-0">
+        <div class="bg-white parchment p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+            <p id="modal-text" class="mb-4">Tem certeza que deseja limpar todos os campos? Esta ação não pode ser desfeita.</p>
+            <div class="flex justify-center space-x-4"><button id="modal-confirm-btn" class="bg-red-800 hover:bg-red-900 text-white font-bold py-2 px-4 rounded">Sim</button><button id="modal-cancel-btn" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">Não</button></div>
+        </div>
+    </div>
+    <!-- Biblioteca para gerar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"
+        integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
