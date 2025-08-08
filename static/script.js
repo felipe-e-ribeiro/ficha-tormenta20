@@ -133,30 +133,18 @@ function configurarSetasAtributos() {
             const input = document.getElementById(attr);
             const action = this.dataset.action;
             const atual = parseInt(input.value);
-            const nivel = parseInt(document.getElementById('nivel')?.value || 1);
-            if (bloqueados[attr] || nivel !== 1) return;
 
-            // Garante que o atributo tenha contador de investimentos
-            if (typeof investimentos[attr] === 'undefined') {
-                investimentos[attr] = 0;
-            }
+            if (bloqueados[attr]) return;
 
             if (action === 'increment') {
-                const proximoInvestimento = investimentos[attr] + 1;
-                const custo = proximoInvestimento;
-
-                if ((distribuidos + custo) <= pontosExtras) {
-                    investimentos[attr] += 1;
+                if (distribuidos < pontosExtras && atual < 10) {
                     input.value = atual + 1;
-                    distribuidos += custo;
+                    distribuidos++;
                 }
-
-            } else if (action === 'decrement') {
-                if (investimentos[attr] > 0 && atual > 0) {
-                    const custo = investimentos[attr];
-                    investimentos[attr] -= 1;
+            } else {
+                if (atual > 0) {
                     input.value = atual - 1;
-                    distribuidos -= custo;
+                    distribuidos--;
                 }
             }
 
